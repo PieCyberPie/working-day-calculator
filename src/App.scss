@@ -67,6 +67,20 @@
   transition: all 0.3s;
 }
 
+.custom-period-field {
+  resize: none;
+  overflow: hidden;
+  width: fit-content;
+  border-radius: 1em;
+  border-color: #22223b;
+  border-width: 1px;
+  &:focus {
+    outline-color: #c9ada7;
+  }
+
+  outline-color: #c9ada7;
+}
+
 .submit--empty {
   &:focus {
     outline-color: #c9ada7;

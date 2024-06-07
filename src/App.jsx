@@ -4,9 +4,10 @@ import "bootstrap/dist/css/bootstrap.css";
 import cn from "classnames";
 import { useState } from "react";
 
-const PERIOD = 365;
+let period = 365;
 
 const userInput = document.getElementsByClassName("submit");
+const periodInput = document.getElementsByClassName("custom-period-field");
 let userInputLength = 0;
 
 function App() {
@@ -16,12 +17,26 @@ function App() {
   const [showWarningMessage, setShowWarningMessage] = useState(true);
 
   function WarningMessage() {
+    const shiftTitle = document.querySelector(
+      ".shift-off-container__title-shift"
+    );
+    const offTitle = document.querySelector(".shift-off-container__title-off");
+    const shiftValue = document.querySelector(
+      ".shift-off-container__value-shift"
+    );
+    const offValue = document.querySelector(".shift-off-container__value-off");
     if (showWarningMessage) {
       return (
         <Alert
           className="warning mb-3"
           variant="info"
-          onClose={() => setShowWarningMessage(false)}
+          onClose={() => {
+            setShowWarningMessage(false);
+            shiftTitle.innerHTML = "Shifts";
+            offTitle.innerHTML = "Offs";
+            shiftValue.innerHTML = 0;
+            offValue.innerHTML = 0;
+          }}
           dismissible
         >
           <Alert.Heading>Be careful!</Alert.Heading>
@@ -54,8 +69,8 @@ function App() {
     ];
 
     console.log(`${shiftCount} ${offCount} ${shiftAndOffCount}`);
-    const fullPeriod = Math.floor(PERIOD / shiftAndOffCount);
-    const leftover = PERIOD - (shiftCount * fullPeriod + offCount * fullPeriod);
+    const fullPeriod = Math.floor(period / shiftAndOffCount);
+    const leftover = period - (shiftCount * fullPeriod + offCount * fullPeriod);
 
     console.log(`${leftover} ${fullPeriod}`);
     for (let i = 0; i < leftover; i++) {
@@ -95,59 +110,96 @@ function App() {
       <div className="page-container d-flex flex-column justify-content-between">
         <div>
           <header className="header">
-            <h1 className="title d-flex pt-3 pt-lg-5 justify-content-center text-center text-nowrap">
+            <h1 className="title d-flex pt-3 pt-lg-5 my-0 justify-content-center text-center text-nowrap">
               Simple shift/off calculator
             </h1>
           </header>
           <Form className="FormInput d-flex justify-content-center">
             <Form.Group className="form-container d-flex flex-column align-items-center">
-              <Form.Label className="my-2 text-center my-lg-4 d-flex flex-column align-items-center">
+              <Form.Label className="my-3 text-center my-lg-5 d-flex flex-column align-items-center">
                 Your input
-                <textarea
-                  type="text"
-                  className={cn({
-                    "my-2": true,
-                    "text-center": true,
-                    submit: true,
-                    "submit--empty": isEmpty,
-                    "submit--valid": isValid,
-                    "submit--invalid": isInvalid,
-                  })}
-                  placeholder="5/2, 3/1, etc..."
-                  rows="1"
-                  cols="16"
-                  maxLength="5"
-                  minLength="3"
-                  wrap="off"
-                  autoFocus
-                  onKeyDown={(key) => {
-                    if (key) {
-                      if (key.keyCode === 13) {
-                        key.preventDefault();
-                        return calculate(userInput[0].value);
+                <div className="d-flex flex-column align-items-center">
+                  <textarea
+                    type="text"
+                    className={cn({
+                      "my-2": true,
+                      "text-center": true,
+                      submit: true,
+                      "submit--empty": isEmpty,
+                      "submit--valid": isValid,
+                      "submit--invalid": isInvalid,
+                    })}
+                    placeholder="5/2, 3/1, etc..."
+                    rows="1"
+                    cols="16"
+                    maxLength="5"
+                    minLength="3"
+                    wrap="off"
+                    autoFocus
+                    onKeyDown={(key) => {
+                      if (key) {
+                        if (key.keyCode === 13) {
+                          key.preventDefault();
+                          return calculate(userInput[0].value);
+                        }
                       }
-                    }
-                  }}
-                  onKeyUp={() => {
-                    userInputLength = userInput[0].value.length;
-                    if (userInputLength === 0) {
-                      setIsEmpty(true);
-                      setIsInvalid(false);
-                      setIsValid(false);
-                    } else if (userInputLength === 1 || userInputLength === 2) {
-                      setIsEmpty(false);
-                      setIsInvalid(true);
-                      setIsValid(false);
-                    } else {
-                      setIsEmpty(false);
-                      setIsInvalid(false);
-                      setIsValid(true);
-                    }
-                  }}
-                />
+                    }}
+                    onKeyUp={() => {
+                      userInputLength = userInput[0].value.length;
+                      if (userInputLength === 0) {
+                        setIsEmpty(true);
+                        setIsInvalid(false);
+                        setIsValid(false);
+                      } else if (
+                        userInputLength === 1 ||
+                        userInputLength === 2
+                      ) {
+                        setIsEmpty(false);
+                        setIsInvalid(true);
+                        setIsValid(false);
+                      } else {
+                        setIsEmpty(false);
+                        setIsInvalid(false);
+                        setIsValid(true);
+                      }
+                    }}
+                  />
+                  <textarea
+                    type="text"
+                    className={cn({
+                      "my-2": true,
+                      "text-center": true,
+                      "custom-period-field": true,
+                    })}
+                    placeholder="Change period here, 365 is by default"
+                    rows="1"
+                    cols="38"
+                    maxLength="10"
+                    minLength="1"
+                    wrap="off"
+                    onKeyDown={(key) => {
+                      if (key) {
+                        if (key.keyCode === 13) {
+                          key.preventDefault();
+                        }
+                      }
+                    }}
+                    onKeyUp={() => {
+                      const customPeriod = parseInt(periodInput[0].value);
+                      if (!isNaN(customPeriod)) {
+                        period = customPeriod;
+                      }
+                    }}
+                  />
+                </div>
                 <Form.Text className="text-muted mx-4">
                   You have to write down in <b> x/y</b> format, where <b>x</b>{" "}
-                  is shift and <b>y</b> is off
+                  is shift and <b>y</b> is off.
+                  <br />
+                  When changing period, you don&apos;t need to submit it, just
+                  type it in and it will automatically change, only integers are
+                  permitted, period should start from number, or it will take an
+                  default (365) value.
                 </Form.Text>
               </Form.Label>
               <button
