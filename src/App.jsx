@@ -13,18 +13,18 @@ function App() {
   const [isEmpty, setIsEmpty] = useState(true);
   const [isInvalid, setIsInvalid] = useState(false);
   const [isValid, setIsValid] = useState(false);
-  const [showWarningMessage, setShowWarningMessage] = useState(false);
+  const [showWarningMessage, setShowWarningMessage] = useState(true);
 
   function WarningMessage() {
     if (showWarningMessage) {
       return (
         <Alert
           className="warning mb-3"
-          variant="danger"
+          variant="info"
           onClose={() => setShowWarningMessage(false)}
           dismissible
         >
-          <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
+          <Alert.Heading>Be careful!</Alert.Heading>
           <p>
             The format should be in <b>x/y</b> format, everything after second{" "}
             <b>/</b> will be dismised, also letters and special signs are
