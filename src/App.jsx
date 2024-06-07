@@ -17,20 +17,24 @@ function App() {
   const [showWarningMessage, setShowWarningMessage] = useState(true);
 
   function WarningMessage() {
-    const shiftTitle = document.querySelector(
-      ".shift-off-container__title-shift"
-    );
-    const offTitle = document.querySelector(".shift-off-container__title-off");
-    const shiftValue = document.querySelector(
-      ".shift-off-container__value-shift"
-    );
-    const offValue = document.querySelector(".shift-off-container__value-off");
     if (showWarningMessage) {
       return (
         <Alert
           className="warning mb-3"
           variant="info"
           onClose={() => {
+            const shiftTitle = document.querySelector(
+              ".shift-off-container__title-shift"
+            );
+            const offTitle = document.querySelector(
+              ".shift-off-container__title-off"
+            );
+            const shiftValue = document.querySelector(
+              ".shift-off-container__value-shift"
+            );
+            const offValue = document.querySelector(
+              ".shift-off-container__value-off"
+            );
             setShowWarningMessage(false);
             shiftTitle.innerHTML = "Shifts";
             offTitle.innerHTML = "Offs";
@@ -68,11 +72,9 @@ function App() {
       shiftCount + offCount,
     ];
 
-    console.log(`${shiftCount} ${offCount} ${shiftAndOffCount}`);
     const fullPeriod = Math.floor(period / shiftAndOffCount);
     const leftover = period - (shiftCount * fullPeriod + offCount * fullPeriod);
 
-    console.log(`${leftover} ${fullPeriod}`);
     for (let i = 0; i < leftover; i++) {
       if (i < shiftCount) {
         shiftNumber++;
