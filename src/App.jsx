@@ -184,12 +184,15 @@ function App() {
                         if (key.keyCode === 13) {
                           key.preventDefault();
                         }
+                        return calculate(userInput[0].value);
                       }
                     }}
                     onKeyUp={() => {
                       const customPeriod = parseInt(periodInput[0].value);
                       if (!isNaN(customPeriod)) {
                         period = customPeriod;
+                      } else {
+                        period = 365;
                       }
                     }}
                   />
